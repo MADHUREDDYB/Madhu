@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 50%;
+  height : 70px;
+  overflow-x : auto;
+  border: 2px solid #ddd;
+  font-size: 15px;
+}
+th, td {
+  text-align: center;
+  height:2px;
+  width:auto;
+  border: black solid 3px;
+  padding: 2px;
+}
+p{
+  width: 100%;
+  height : auto;
+  border: 3px solid #ddd;
+  overflow: auto;
+   }
+#tabledata{height:200px;width:50%;overflow:auto;}
+tr:nth-child(even){background-color: #f2f2f2 ; width:10px;height:50px}
+</style>
+</head>
+<body>
+<h2 style="text-align:center">CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl</h2>
+<hr/>
+<h2> Summary :</h2>
+<table style="width:100%;border 3px black">
+  <tr>
+    <th>Count Type</th>
+    <th>Count</th>
+  </tr>
+  <tr>
+    <td>Total Test Cases</td>
+    <td>39</td>
+  </tr>
+    <tr>
+    <td>Test Case(s) Not Executed</td>
+    <td>4</td>
+  </tr>
+  <tr>
+    <td>Test Case(s) Executed</td>
+    <td>35</td>
+  </tr>
+  <tr style = 'color:darkgreen'>
+    <td>Test Case(s) Passed</td>
+    <td>0</td>
+  </tr>
+  <tr style = 'color:Red'>
+    <td>Test Case(s) Failed</td>
+    <td>35</td>
+  </tr>
+</table>
+<hr/>
+<h3><i>TS001</i> - TC-1 : Check the count of the table</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT 'Target' as Type, COUNT(*) as COUNT FROM ( SELECT DISTINCT Initive_Nm,Mtrc_Nm,Rgnl_Busns,Thrptc_Area,Fnctnl_Area,Prd,Nmrtr,Dnmntr,Strt_Dt,End_Dt,Mtrc_subtyp,Unqe_Hsh_Key,Data_Hsh_Key,Ntrl_Hsh_Key FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    ) 
+UNION ALL 
+SELECT 'Source' as Type, COUNT(*) as COUNT FROM ( SELECT DISTINCT Initive_Nm,Mtrc_Nm,Rgnl_Busns,Thrptc_Area,Fnctnl_Area,Prd,Nmrtr,Dnmntr,Strt_Dt,End_Dt,Mtrc_subtyp,Unqe_Hsh_Key,Data_Hsh_Key,Ntrl_Hsh_Key FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  )</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-2 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Initive_Nm FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Initive_Nm FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-3 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Mtrc_Nm FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Mtrc_Nm FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-4 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Rgnl_Busns FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Rgnl_Busns FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-5 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Thrptc_Area FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Thrptc_Area FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-6 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Fnctnl_Area FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Fnctnl_Area FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-7 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Prd FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Prd FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-8 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Nmrtr FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Nmrtr FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-9 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Dnmntr FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Dnmntr FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-10 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Strt_Dt FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Strt_Dt FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-11 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT End_Dt FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT End_Dt FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-12 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Mtrc_subtyp FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Mtrc_subtyp FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-13 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Unqe_Hsh_Key FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Unqe_Hsh_Key FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-14 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Data_Hsh_Key FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Data_Hsh_Key FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS002</i> - TC-15 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Ntrl_Hsh_Key FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS 
+SELECT Ntrl_Hsh_Key FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-16 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Initive_Nm FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Initive_Nm FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-17 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Mtrc_Nm FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Mtrc_Nm FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-18 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Rgnl_Busns FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Rgnl_Busns FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-19 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Thrptc_Area FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Thrptc_Area FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-20 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Fnctnl_Area FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Fnctnl_Area FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-21 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Prd FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Prd FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-22 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Nmrtr FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Nmrtr FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-23 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Dnmntr FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Dnmntr FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-24 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Strt_Dt FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Strt_Dt FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-25 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT End_Dt FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT End_Dt FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-26 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Mtrc_subtyp FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Mtrc_subtyp FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-27 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Unqe_Hsh_Key FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Unqe_Hsh_Key FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-28 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Data_Hsh_Key FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Data_Hsh_Key FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS003</i> - TC-29 : Check the difference b/w Source and Target column</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT Ntrl_Hsh_Key FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS 
+SELECT DISTINCT Ntrl_Hsh_Key FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS004</i> - TC-30 : Check the difference b/w Source and Target Table</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Initive_Nm,Mtrc_Nm,Rgnl_Busns,Thrptc_Area,Fnctnl_Area,Prd,Nmrtr,Dnmntr,Strt_Dt,End_Dt,Mtrc_subtyp,Unqe_Hsh_Key,Data_Hsh_Key,Ntrl_Hsh_Key FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+MINUS
+SELECT DISTINCT Initive_Nm,Mtrc_Nm,Rgnl_Busns,Thrptc_Area,Fnctnl_Area,Prd,Nmrtr,Dnmntr,Strt_Dt,End_Dt,Mtrc_subtyp,Unqe_Hsh_Key,Data_Hsh_Key,Ntrl_Hsh_Key FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS005</i> - TC-31 : Check the difference b/w Source and Target Table</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM (
+SELECT DISTINCT Initive_Nm,Mtrc_Nm,Rgnl_Busns,Thrptc_Area,Fnctnl_Area,Prd,Nmrtr,Dnmntr,Strt_Dt,End_Dt,Mtrc_subtyp,Unqe_Hsh_Key,Data_Hsh_Key,Ntrl_Hsh_Key FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    
+MINUS
+SELECT DISTINCT Initive_Nm,Mtrc_Nm,Rgnl_Busns,Thrptc_Area,Fnctnl_Area,Prd,Nmrtr,Dnmntr,Strt_Dt,End_Dt,Mtrc_subtyp,Unqe_Hsh_Key,Data_Hsh_Key,Ntrl_Hsh_Key FROM ( SELECT  "Hive" AS Initive_Nm,"# of Training Hours Delivered to Business Users"  AS Mtrc_Nm,"Global" AS Rgnl_Busns,"General" AS Thrptc_Area,"Commercial" AS Fnctnl_Area,trunc(TO_DATE(DT),'MM') AS Prd,SUM(Nbr_Of_Trng_Hrs_Dlvrd_To_Bsnss_Usr)  as Nmrtr,0 as  Dnmntr,NULL AS Strt_Dt,last_day(trunc(TO_DATE(DT),'MM')) AS End_Dt,NULL AS Mtrc_subtyp,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Unqe_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Data_Hsh_Key,md5( '# of Training Hours Delivered to Business Users' || trunc(TO_DATE(DT),'MM') ) AS Ntrl_Hsh_Key  FROM CORP_DE_HUB.Txn_Hub_Mthly_Inpt_Hm_Rgnl   )  
+)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS006</i> - TC-32 : Check if duplicates are available in the table</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) AS COUNT FROM(  SELECT Initive_Nm,Mtrc_Nm,Rgnl_Busns,Thrptc_Area,Fnctnl_Area,Prd,Nmrtr,Dnmntr,Strt_Dt,End_Dt,Mtrc_subtyp,Unqe_Hsh_Key,Data_Hsh_Key,Ntrl_Hsh_Key, COUNT(*) Count FROM   CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl GROUP BY  Initive_Nm,Mtrc_Nm,Rgnl_Busns,Thrptc_Area,Fnctnl_Area,Prd,Nmrtr,Dnmntr,Strt_Dt,End_Dt,Mtrc_subtyp,Unqe_Hsh_Key,Data_Hsh_Key,Ntrl_Hsh_Key  HAVING COUNT(*) >1)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS007</i> - TC-33 : Check the Hash Key columns are not Null and Unique Hash key is unique</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT 
+"Unqe_Hsh_Key NULL check" as Check_type, 
+COUNT(1) as cnt 
+FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl WHERE Unqe_Hsh_Key is NULL  
+UNION 
+SELECT 
+"Data_Hsh_Key NULL check" as Check_type, 
+COUNT(1) as cnt 
+FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl WHERE Data_Hsh_Key is NULL 
+UNION
+SELECT
+"Ntrl_Hsh_Key NULL check" as Check_type,
+COUNT(1) as cnt
+FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl WHERE Ntrl_Hsh_Key is NULL 
+UNION
+SELECT
+"Unqe_Hsh_Key duplicate check" as Check_type,
+COUNT(1) as cnt FROM(
+SELECT
+Unqe_Hsh_Key
+FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl group by Unqe_Hsh_Key having COUNT(*)>1)</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS008</i> - TC-34 : Compare entry created in job statistics table with Database </h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT COUNT(*) as Count from  (SELECT DISTINCT AUD_LD_BTCH_ID,AUD_LD_JOB_ID FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl
+WHERE AUD_CRT_DTS = (SELECT MAX(AUD_CRT_DTS) FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl)
+MINUS
+SELECT BATCHRUNID,JOBRUNID FROM CORP_DE_HUB.job_run_statistics
+WHERE batchname= 'app_corp_dab_hive_HubToMart' AND jobname= 'm_corp_dab_hive_HubToMart_Mthly_Inpt_Hm_rgnl'
+AND jobstatus='SUCCESS' AND createdtime= (select max(createdtime) FROM  CORP_DE_HUB.job_run_statistics
+WHERE batchname= 'app_corp_dab_hive_HubToMart' AND jobname= 'm_corp_dab_hive_HubToMart_Mthly_Inpt_Hm_rgnl'))</p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div><h3><i>TS009</i> - TC-35 : Check the Audit columns have expected values</h3>
+<div style = 'border:3px solid black;padding: 10px;background-color:white'>
+<i>QUERY:</i>
+<p>SELECT DISTINCT Aud_Ld_Dts,Aud_Ld_Usr_Id,Aud_Ld_Btch_Id,Aud_Ld_Job_Id,Aud_File_Nm,Aud_Src_Sys_Id,Aud_Upd_Dts,Aud_Crt_Dts,Dltd_In_Src_Ind,Dltd_In_Src_Dts,Aud_Eff_Dts,Aud_End_Dts FROM CORP_DE_MART.Txn_Mart_Corp_Dab_Hive_Mtrc_Rgnl  where Mtrc_Nm = '# of Training Hours Delivered to Business Users'    </p>
+<hr/><hr/>
+<i>OUTPUT:&nbsp Failed Due to Database Error : Error Description</i>
+<hr/>
+<div id = 'tabledata'>
+  'str' object has no attribute 'to_string'
+</div>
+</div></body>
+        </html>

@@ -1,0 +1,16 @@
+Date Of Release*,Use Case*,# of enterprise data domains readily accessible,# of non-HIVE platforms retired or converged,# of non-HIVE platforms still in use,# of APIs at level 3+ maturity,# of patient services delivered,# of out-of-box patient services solutions,# of out-of-box datasets,Updated By (Name)
+1/10/2021,Dummy use case 1,2,1,1,1,1,0,1,Dummy User 1
+1/20/2021,Dummy use case 2,2,1,2,2,,,1,Dummy User 2
+1/21/2021,Dummy use case 3,1,1,3,1,1,1,,Dummy User 3
+1/22/2021,Dummy use case 4,3,2,1,1,2,0,0,Dummy User 4
+1/23/2021,Dummy use case 5,1,2,2,2,1,0,0,Dummy User 5
+1/24/2021,Dummy use case 6,2,1,1,1,1,0,1,Dummy User 6
+2/10/2021,Dummy use case 7,1,2,1,1,2,0,0,Dummy User 7
+2/11/2021,Dummy use case 8,1,2,1,2,1,2,2,Dummy User 8
+2/12/2021,Dummy use case 9,1,1,1,1,2,,4,Dummy User 9
+2/13/2021,Dummy use case 10,1,1,1,2,2,3,0,Dummy User 10
+3/15/2021,Dummy use case 11,1,1,1,1,1,1,1,Dummy User 11
+3/20/2021,Dummy use case 12,2,2,1,1,1,0,0,Dummy User 12
+4/20/2021,Dummy use case 13,3,1,2,1,1,1,1,Dummy User 13
+4/23/2021,Dummy use case 14,1,2,4,2,1,0,0,Dummy User 14
+5/25/2021,Mexico CRM,1,1,3,0,1,0,0,Kelsey Yevak

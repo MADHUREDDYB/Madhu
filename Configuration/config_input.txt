@@ -1,0 +1,27 @@
+# If any parameter is not applicable/available, please Mention 'NA'
+# DONOT change values before colon ':'
+# All file names and path should be on double quotes ""
+# Multiple values should be comma ',' seperated in Src data file name and Raw data file name. All names of source and Raw file should be in exact order as Src to Lake STTM 
+# Input folder should contain all the input STTMs,Src data file(if applicable), Raw data file(if applicable) and utility folder(Conating all python code and dependencies)
+
+
+
+Input folder path:"C:\Users\MadhReddy\Desktop\AwsTestingAccelerator"
+Output folder path:"C:\Users\MadhReddy\Desktop\AwsTestingAccelerator"
+Databricks connection string:"jdbc:spark://dedev.databricks.onetakeda.com:443/default;transportMode=http;ssl=1;httpPath=sql/protocolv1/o/0/0819-210645-naiad614;AuthMech=3;UID=token;PWD=dapief69a41a74c9f2434e5d88bac5e0e068"
+Src to Lake STTM  name:"STTM_DAB_HIVE_Src_Lake.xlsx"
+Lake to Lake Hist STTM name:"STTM_DAB_HIVE_Lake_LakeHist.xlsx"
+Lake Hist to Hub STTM name:"STTM_DAB_HIVE_LakeHist_Hub.xlsx"
+Hub to Mart STTM name:"STTM_DAB_HIVE_Hub_Mart.xlsx"
+Source data file name:"Release_Tracker_Home_SRC.csv,Release_Tracker_Capabilities_SRC.csv,Monthly_Use_Cases_SRC.csv,Monthly_Input_Home_SRC.csv,Monthly_Input_Third_Parties_SRC.csv,Release_Tracker_Service_Expan_SRC.csv"
+Raw data file name:"Release_Tracker_Home_RAW.csv,Release_Tracker_Capabilities_RAW.csv,Monthly_Use_Cases_RAW.csv,Monthly_Input_Home_RAW.csv,Monthly_Input_Third_Parties_RAW.csv,Release_Tracker_Service_Expan_RAW.csv"
+Lake table name:"CORP_DE_LAKE.Release_Tracker_Home,CORP_DE_LAKE.Release_Tracker_Capabilities,CORP_DE_LAKE.Monthly_Use_Cases,CORP_DE_LAKE.Monthly_Input_Home,CORP_DE_LAKE.Monthly_Input_Third_Parties,CORP_DE_LAKE.Release_Tracker_Service_Expansion"
+src_sys_name:"HIVE"
+JIRA Project Key:"ATA"
+JIRA Reporter:"madhavreddy536@gmail.com"
+JIRA Assignee:"madhavreddy536@gmail.com"
+JIRA Server:"https://ata99.atlassian.net"
+JIRA API Token:"CRCHRHtSQugZGnhLTy4QCC31"
+JIRA UserName:"madhavreddy536@gmail.com"
+
+

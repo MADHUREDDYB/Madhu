@@ -1,0 +1,16 @@
+Date Of Release,Use Case Name*,Use Case Description,Utilizing Common Services? (Y/N)*,Global Use Case?*,"Utilizing New, HIVE-Native Capabilities or Services? (Y/N)*",Use Case Live? (Y/N)*,Time To Market from Scrum Team Initiation to Launch (Sprints),Estimated Time to Market from Scrum Team Initiation to Launch Pre-HIVE (Sprints),Updated By (Name)
+5/25/2021,Mexico CRM,CRM supporting 3 TA's,Y,N,N,Y,5,13,Kelsey Yevak
+1/10/2021,Dummy use case 1,,Y,Y,Y,Y,6,12,Dummy User 1
+,Dummy use case 2,,Y,N,Y,N,7,13,Dummy User 2
+,Dummy use case 3,,N,N,N,N,8,14,Dummy User 3
+1/22/2021,Dummy use case 4,,N,Y,N,Y,9,15,Dummy User 4
+1/23/2021,Dummy use case 5,,Y,Y,Y,Y,10,16,Dummy User 5
+,Dummy use case 6,,Y,N,Y,N,6,17,Dummy User 6
+,Dummy use case 7,,N,N,N,N,7,13,Dummy User 7
+2/11/2021,Dummy use case 8,,Y,Y,Y,Y,8,12,Dummy User 8
+2/12/2021,Dummy use case 9,,N,Y,N,Y,9,13,Dummy User 9
+,Dummy use case 10,,N,N,N,N,10,14,Dummy User 10
+3/15/2021,Dummy use case 11,,Y,Y,Y,Y,5,15,Dummy User 11
+,Dummy use case 12,,N,N,N,N,6,16,Dummy User 12
+4/20/2021,Dummy use case 13,,Y,Y,Y,Y,7,17,Dummy User 13
+,Dummy use case 14,,N,N,N,N,8,13,Dummy User 14
