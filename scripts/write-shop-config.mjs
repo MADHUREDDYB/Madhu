@@ -1,10 +1,19 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 
-const supabaseUrl = (process.env['SUPABASE_URL'] ?? '').trim();
-const supabaseAnonKey = (process.env['SUPABASE_ANON_KEY'] ?? process.env['SUPABASE_PUBLISHABLE_KEY'] ?? '').trim();
+// This optional file contains public browser configuration, never private keys.
+let saved = {};
+try {
+  saved = JSON.parse(await readFile(resolve('shop.config.json'), 'utf8'));
+  if (!saved || typeof saved !== 'object' || Array.isArray(saved)) throw new Error('shop.config.json must contain a JSON object.');
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+}
+const hasBackendOverride = process.env['SUPABASE_URL'] !== undefined || process.env['SUPABASE_ANON_KEY'] !== undefined || process.env['SUPABASE_PUBLISHABLE_KEY'] !== undefined;
+const supabaseUrl = (hasBackendOverride ? process.env['SUPABASE_URL'] ?? '' : saved.supabaseUrl ?? '').trim();
+const supabaseAnonKey = (hasBackendOverride ? process.env['SUPABASE_ANON_KEY'] ?? process.env['SUPABASE_PUBLISHABLE_KEY'] ?? '' : saved.supabaseAnonKey ?? '').trim();
 const requestedMode = process.env['SHOP_DEMO_MODE'];
-const demoMode = requestedMode === undefined ? !(supabaseUrl || supabaseAnonKey) : requestedMode === 'true';
+const demoMode = requestedMode !== undefined ? requestedMode === 'true' : hasBackendOverride ? !(supabaseUrl || supabaseAnonKey) : typeof saved.demoMode === 'boolean' ? saved.demoMode : !(supabaseUrl || supabaseAnonKey);
 
 if (requestedMode !== undefined && !['true', 'false'].includes(requestedMode)) throw new Error('SHOP_DEMO_MODE must be true or false.');
 if (!demoMode) {
@@ -15,7 +24,7 @@ if (!demoMode) {
     if (role !== 'anon') throw new Error('Only a public publishable key or legacy anon key may be included. Never use service_role or sb_secret_ keys.');
   }
 }
-const config = { shopName: (process.env['SHOP_NAME'] ?? 'Madhu’s Crochet').trim().slice(0, 100), currency: 'INR', currencyLocale: 'en-IN', supabaseUrl: demoMode ? '' : supabaseUrl, supabaseAnonKey: demoMode ? '' : supabaseAnonKey, demoMode };
+const config = { shopName: (process.env['SHOP_NAME'] ?? saved.shopName ?? 'Madhu’s Crochet').trim().slice(0, 100), currency: 'INR', currencyLocale: 'en-IN', supabaseUrl: demoMode ? '' : supabaseUrl, supabaseAnonKey: demoMode ? '' : supabaseAnonKey, demoMode };
 const path = resolve('public/shop-config.json');
 await mkdir(dirname(path), { recursive: true });
 await writeFile(path, `${JSON.stringify(config, null, 2)}\n`, 'utf8');

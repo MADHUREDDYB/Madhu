@@ -35,7 +35,7 @@ Cancellation does not automatically return stock or process a refund. Adjust sto
 
 ## Demo and Supabase setup
 
-With no backend environment configuration, `npm start` and `npm run build` generate a clearly labelled browser-only demo. Demo admin is available only in demo mode. Sample products/photos and fictional orders are for demonstration; replace them with your actual crochet products before selling. Use invented contact details when testing demo checkout. Demo orders stay in the same browser and are not real sales.
+The public Supabase project configuration is saved in `shop.config.json`, with demo mode disabled. `npm start` and `npm run build` now use those settings automatically. Environment variables override the saved configuration. Set `SHOP_DEMO_MODE=true` explicitly if you want a browser-only demo. Demo admin is available only in demo mode. Sample products/photos and fictional orders are for demonstration; replace them with your actual crochet products before selling. Use invented contact details when testing demo checkout. Demo orders stay in the same browser and are not real sales.
 
 For a live shop, follow [Supabase setup](supabase/README.md): create a project, apply the supplied SQL migration, create your admin account, grant its membership, and configure:
 
@@ -50,7 +50,9 @@ A legacy public `SUPABASE_ANON_KEY` also works. Never include a service-role key
 
 Live customer orders are stored in Supabase PostgreSQL with row-level security. Public customers can read available products and submit validated orders, but cannot read private orders or grant themselves admin access. The checkout transaction calculates current prices on the server, snapshots product details, prevents duplicate retries, and locks stock against concurrent purchases. Product images use Supabase Storage; uploads are restricted to admins.
 
-No live Supabase project has been connected or deployed from this workspace yet. Local browser and isolated PostgreSQL tests do not establish live-project readiness.
+The supplied Supabase project URL and public publishable key are saved in `shop.config.json`. The compiled download uses live mode and requires your authorized admin login. No public hosting deployment or owner login/test order has been performed here. Local/mocked tests do not establish the outcome of a live checkout.
+
+The latest read-only connection check reached this Supabase project, but its API reports the shop tables missing (`PGRST205`). Run the complete migration in the SQL Editor of this project and grant your admin account membership before testing orders or opening the shop to customers.
 
 ## Low-latency choices
 
@@ -69,10 +71,23 @@ Playwright uses `/usr/bin/chromium` when present; otherwise install its browser 
 
 The backend regression script needs Docker. It runs the actual migration against an isolated PostgreSQL container with minimal Supabase auth/storage schemas, checking access policies, server pricing, stock rollback, idempotent requests and concurrent checkout. It does not contact a live database.
 
+## Put the website on a public URL
+
+The easiest path is Netlify Drop; you do not need Node.js or `npx` for this deployment:
+
+1. Open `downloads/crochet-website.zip` on the GitHub `feature/crochet-shop` branch and click **Download raw file**. Download it again if you have an earlier demo ZIP.
+2. Extract the archive. The extracted folder must contain `index.html`, `shop-config.json`, `_redirects`, `_headers`, JavaScript files and `images/`.
+3. Sign in at https://app.netlify.com/drop and drag that extracted folder onto the upload area. Upload the compiled folder, not the repository source.
+4. Netlify displays your public `https://<site-name>.netlify.app` URL. You can choose an available site name in its site settings; a custom domain is optional.
+5. Open that site's `/admin` path and sign in using your Supabase admin account. Add an actual product and place one order with invented test details to confirm the database, order display, manual payment status and stock.
+6. Share the shop URL after the live check succeeds. Future changes require uploading a newly built folder, or connecting the GitHub branch for automatic builds.
+
+A Netlify deployment creates the public website URL. Publishing the Codex cloud environment is a separate action.
+
 ## Free starting hosting
 
 Cloudflare Pages or Netlify can host the compiled application. Configure build command `npm run build`, publish directory `dist/madhu/browser`, Node.js 24.19.0 and the backend public build variables above. `_redirects` serves Angular routes such as `/admin`, and `_headers` supplies caching and browser security headers.
 
-A compiled demo build is available at `downloads/crochet-website.zip` on the `feature/crochet-shop` branch. Open that file on GitHub and use **Download raw file** to download it, then extract it for local testing or static hosting. The same build is packaged outside the checkout at `/workspace/crochet-shop-website.zip`. Uploading it to a static host produces an interactive public demo; it will not receive real customer orders until you build with your live Supabase configuration. Supabase’s free plan is a starting option; review its current quotas/inactivity policy before launch.
+A compiled live-configured build is available at `downloads/crochet-website.zip` on the `feature/crochet-shop` branch. Open that file on GitHub and use **Download raw file** to download it, then extract it for local testing or static hosting. The same build is packaged outside the checkout at `/workspace/crochet-shop-website.zip`. Uploading this current build to a static host connects the frontend to the saved Supabase project; admin access requires the account and membership you configured. Supabase’s free plan is a starting option; review its current quotas/inactivity policy before launch.
 
 Stop the development server before `npm ci`, because reinstalling replaces its dependency files. In this cloud environment use `npm ci --cache /workspace/.npm-cache`. Work in the existing checkout; tasks are already isolated and do not need another worktree.

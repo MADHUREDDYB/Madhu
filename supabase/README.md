@@ -1,6 +1,8 @@
 # Supabase backend
 
-The app includes a browser-only demo so you can try the complete shopping and admin flow before connecting a backend. Demo orders are explicitly labelled, stay on the same browser, and are not sales. Use invented contact details when testing.
+The app currently saves your public Supabase project settings in `shop.config.json` and uses live mode. An explicit `SHOP_DEMO_MODE=true` override enables a browser-only demo for trying the shopping/admin flow. Demo orders are explicitly labelled, stay on the same browser, and are not sales. Use invented contact details when testing.
+
+Read-only checks against the saved project reached Supabase Authentication successfully, but its REST API returned `PGRST205` for `products`, `orders`, `order_items`, and `admin_members`: these tables were not present in the exposed schema cache. Apply the complete migration in this same project's SQL Editor, then grant your existing admin account membership using the SQL below. A live checkout has not yet been verified.
 
 ## Connect a live shop
 
@@ -20,7 +22,7 @@ The app includes a browser-only demo so you can try the complete shopping and ad
 6. Deploy `dist/madhu/browser` to a static host. Open the admin page, sign in, upload actual product photos, set prices/stock, and add products. Live mode starts with an empty catalog, with no demo products or orders copied to Supabase.
 7. Before taking customer orders, confirm one test checkout appears in admin, mark its payment manually, change its status, and confirm an anonymous browser cannot open the admin dashboard.
 
-`node scripts/write-shop-config.mjs` regenerates the public config. With no Supabase configuration it defaults to demo mode. A partial live configuration fails the build rather than silently becoming a demo. `SHOP_DEMO_MODE=true` explicitly builds a demo with no backend keys included.
+`node scripts/write-shop-config.mjs` regenerates the public config. It reads saved public settings from `shop.config.json`, unless backend environment variables override them. Without a saved file or environment settings it defaults to demo mode. A partial live configuration fails the build rather than silently becoming a demo. `SHOP_DEMO_MODE=true` explicitly builds a demo with no backend keys included.
 
 ## Data and access
 
