@@ -10,3 +10,6 @@ test-results/
 !.env.example
 *.log
 .DS_Store
+
+public/shop-config.json
+.env.local
