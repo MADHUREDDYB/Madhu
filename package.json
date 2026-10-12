@@ -1,0 +1,35 @@
+{
+  "name": "madhu-next30",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A personal planner for the next 30 days.",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
+  "scripts": {
+    "start": "ng serve --host 0.0.0.0 --port 4200",
+    "build": "ng build",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "tsx --test tests/*.test.ts",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@angular/common": "22.2.2",
+    "@angular/compiler": "22.2.2",
+    "@angular/core": "22.2.2",
+    "@angular/forms": "22.2.2",
+    "@angular/platform-browser": "22.2.2",
+    "@fontsource-variable/dm-sans": "5.3.0",
+    "@fontsource-variable/manrope": "5.3.0",
+    "rxjs": "7.8.2",
+    "tslib": "2.8.1"
+  },
+  "devDependencies": {
+    "@angular/build": "22.2.2",
+    "@angular/cli": "22.2.2",
+    "@angular/compiler-cli": "22.2.2",
+    "@playwright/test": "1.64.0",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3"
+  }
+}
