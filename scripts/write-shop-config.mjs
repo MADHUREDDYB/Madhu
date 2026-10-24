@@ -24,7 +24,7 @@ if (!demoMode) {
     if (role !== 'anon') throw new Error('Only a public publishable key or legacy anon key may be included. Never use service_role or sb_secret_ keys.');
   }
 }
-const config = { shopName: (process.env['SHOP_NAME'] ?? saved.shopName ?? 'Madhu’s Crochet').trim().slice(0, 100), currency: 'INR', currencyLocale: 'en-IN', supabaseUrl: demoMode ? '' : supabaseUrl, supabaseAnonKey: demoMode ? '' : supabaseAnonKey, demoMode };
+const config = { shopName: 'Thread in Loops', currency: 'INR', currencyLocale: 'en-IN', supabaseUrl: demoMode ? '' : supabaseUrl, supabaseAnonKey: demoMode ? '' : supabaseAnonKey, demoMode };
 const path = resolve('public/shop-config.json');
 await mkdir(dirname(path), { recursive: true });
 await writeFile(path, `${JSON.stringify(config, null, 2)}\n`, 'utf8');
