@@ -5,7 +5,7 @@ export const config = { schedule: '*/5 * * * *' };
 
 function safeText(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function formatMoney(paise) { return new Intl.NumberFormat('en-IN', {style:'currency',currency:'INR'}).format(paise / 100); }
-function emailContent(record) {
+export function emailContent(record, items = []) {
  const reference = safeText(record.order_number), customer = safeText(record.customer_name), total = formatMoney(record.total_paise);
  const messages = {
   order_placed: ['We received your order', 'Your order has been placed. Payment may still be pending until verified.'],
@@ -14,7 +14,9 @@ function emailContent(record) {
  };
  const [title,description] = messages[record.event_type] ?? messages.status_changed;
  const subject = 'Thread in Loops • ' + title + ' • ' + record.order_number;
- const html = '<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#322732"><h2>Thread in Loops 🧶</h2><p>Hello ' + customer + ',</p><p>' + safeText(description) + '</p><p><b>Order:</b> ' + reference + '<br><b>Total:</b> ' + total + '</p><p>For questions, reply to this email.</p><p>Thank you,<br>Thread in Loops</p></div>';
+ const rows = items.map(item => '<tr><td style="padding:8px;border-bottom:1px solid #eee">' + safeText(item.product_name) + '</td><td style="padding:8px;border-bottom:1px solid #eee">' + Number(item.quantity) + '</td><td style="padding:8px;border-bottom:1px solid #eee">' + formatMoney(item.unit_price_paise * item.quantity) + '</td></tr>').join('');
+ const summary = rows ? '<h3>Order items</h3><table style="width:100%;border-collapse:collapse"><thead><tr><th align="left">Item</th><th align="left">Qty</th><th align="left">Amount</th></tr></thead><tbody>' + rows + '</tbody></table>' : '';
+ const html = '<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#322732"><h2>Thread in Loops 🧶</h2><p>Hello ' + customer + ',</p><p>' + safeText(description) + '</p><p><b>Order:</b> ' + reference + '<br><b>Total:</b> ' + total + '</p>' + summary + '<p>For questions, reply to this email.</p><p>Thank you,<br>Thread in Loops</p></div>';
  return {subject,html};
 }
 export default async () => {
@@ -29,7 +31,9 @@ export default async () => {
  let delivered=0;
  for(const item of batch ?? []) {
    try {
-     const {subject,html}=emailContent(item);
+     const {data:orderItems,error:itemsError} = await db.from('order_items').select('product_name,quantity,unit_price_paise').eq('order_id',item.order_id);
+     if(itemsError) throw new Error('Order item lookup failed');
+     const {subject,html}=emailContent(item,orderItems ?? []);
      const res=await fetch('https://api.resend.com/emails',{
        method:'POST',
        headers:{'Authorization':'Bearer '+RESEND_API_KEY,'Content-Type':'application/json','Idempotency-Key':item.event_key},
