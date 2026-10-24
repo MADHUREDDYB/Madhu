@@ -22,6 +22,7 @@ export class StorefrontComponent implements OnInit, OnDestroy {
   readonly sort = signal('featured');
   readonly panel = signal<'cart' | 'checkout' | 'success'>('cart');
   readonly submitting = signal(false);
+  readonly paymentNotice = signal('');
   readonly checkoutErrors = signal<string[]>([]);
   readonly orderNumber = signal('');
   readonly toast = signal('');
@@ -70,6 +71,52 @@ export class StorefrontComponent implements OnInit, OnDestroy {
     setTimeout(() => this.cartDialog().nativeElement.querySelector<HTMLInputElement>('[data-testid="checkout-name"]')?.focus());
   }
 
+  private async paymentApi(endpoint: string, payload: object): Promise<any> {
+    const response = await fetch('/.netlify/functions/' + endpoint, {
+      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload)
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || 'Payment service is temporarily unavailable.');
+    return data;
+  }
+
+  private async launchRazorpay(orderId: string): Promise<boolean> {
+    const config = await this.paymentApi('razorpay-create', { orderId });
+    if (!window.document.getElementById('razorpay-checkout-script')) {
+      const script = document.createElement('script');
+      script.id = 'razorpay-checkout-script';
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      const loaded = new Promise<void>((resolve, reject) => {
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error('Unable to load secure payment checkout.'));
+      });
+      document.head.appendChild(script);
+      await loaded;
+    }
+    const Razorpay = (window as any).Razorpay;
+    if (typeof Razorpay !== 'function') throw new Error('Secure payment checkout is unavailable.');
+    return new Promise<boolean>((resolve, reject) => {
+      let complete = false;
+      const checkout = new Razorpay({
+        key: config.keyId, amount: config.amount, currency: 'INR', order_id: config.razorpayOrderId,
+        name: this.shop.config().shopName, description: 'Crochet order ' + config.orderNumber,
+        prefill: { name: this.customer.name, email: this.customer.email, contact: this.customer.phone },
+        theme: { color: '#986b77' },
+        handler: async (payment: any) => {
+          if (complete) return;
+          complete = true;
+          try {
+            const verified = await this.paymentApi('razorpay-verify', payment);
+            resolve(verified.verified === true);
+          } catch (error) { reject(error); }
+        },
+        modal: { ondismiss: () => { if (!complete) { complete = true; resolve(false); } } }
+      });
+      checkout.on('payment.failed', () => { if (!complete) { complete = true; resolve(false); } });
+      checkout.open();
+    });
+  }
+
   async placeOrder(): Promise<void> {
     if (this.submitting()) return;
     const errors = validateCustomer(this.customer);
@@ -78,14 +125,24 @@ export class StorefrontComponent implements OnInit, OnDestroy {
     this.checkoutErrors.set(errors);
     if (errors.length) return;
     this.submitting.set(true);
+    let savedOrder: { id: string; orderNumber: string } | undefined;
     try {
-      const confirmation = await this.shop.placeOrder({ ...this.customer }, this.cart.lines().map(line => ({ ...line })));
-      this.orderNumber.set(confirmation.orderNumber);
+      savedOrder = await this.shop.placeOrder({ ...this.customer }, this.cart.lines().map(line => ({ ...line })));
+      this.orderNumber.set(savedOrder.orderNumber);
+      let paid = false;
+      if (!this.shop.demoMode()) paid = await this.launchRazorpay(savedOrder.id);
+      this.paymentNotice.set(this.shop.demoMode() ? 'Preview only. No real payment was collected.' : paid
+        ? 'Your payment has been verified. Thank you!'
+        : 'Payment was not completed. Your order is saved with payment pending. Contact the seller with your order reference before attempting another payment.');
       this.cart.clear();
       this.customer = { name: '', phone: '', email: '', address: '', city: '', postalCode: '', note: '' };
       this.panel.set('success');
     } catch (error) {
-      this.checkoutErrors.set([error instanceof Error ? error.message : 'We couldn’t place your order. Please try again.']);
+      if (savedOrder) {
+        this.paymentNotice.set('Your order was saved, but payment could not be confirmed. Do not place another order. Contact the seller with your reference and payment details.');
+        this.cart.clear();
+        this.panel.set('success');
+      } else this.checkoutErrors.set([error instanceof Error ? error.message : 'We couldn’t place your order. Please try again.']);
     } finally { this.submitting.set(false); }
   }
 
