@@ -7,7 +7,7 @@ import type { CartLine, Customer, OrderStatus, PaymentStatus, Product, ProductDr
 const DEFAULT_CONFIG: PublicShopConfig = { shopName: "Madhu’s Crochet", currency: 'INR', currencyLocale: 'en-IN', supabaseUrl: '', supabaseAnonKey: '', demoMode: true };
 const PRODUCTS_KEY = 'madhu-crochet-demo-products-v1';
 const ORDERS_KEY = 'madhu-crochet-demo-orders-v1';
-const ORDER_STATUSES: OrderStatus[] = ['new', 'confirmed', 'making', 'shipped', 'delivered', 'cancelled'];
+const ORDER_STATUSES: OrderStatus[] = ['new', 'confirmed', 'making', 'shipped', 'delivered', 'cancelled', 'refunded', 'returned'];
 const PAYMENT_STATUSES: PaymentStatus[] = ['pending', 'received'];
 const ORDER_PAGE_SIZE = 100;
 
