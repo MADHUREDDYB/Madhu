@@ -1,4 +1,4 @@
-export type OrderStatus = 'new' | 'confirmed' | 'making' | 'shipped' | 'delivered' | 'cancelled';
+export type OrderStatus = 'new' | 'confirmed' | 'making' | 'shipped' | 'delivered' | 'cancelled' | 'refunded' | 'returned';
 export type PaymentStatus = 'pending' | 'received';
 export interface Product {
   id: string;
