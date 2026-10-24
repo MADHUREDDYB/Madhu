@@ -4,7 +4,7 @@ import { DEMO_ORDERS, DEMO_PRODUCTS } from './demo-data';
 import { normalizePhone } from './shop.utils';
 import type { CartLine, Customer, OrderStatus, PaymentStatus, Product, ProductDraft, PublicShopConfig, ShopOrder } from './models';
 
-const DEFAULT_CONFIG: PublicShopConfig = { shopName: "Madhu’s Crochet", currency: 'INR', currencyLocale: 'en-IN', supabaseUrl: '', supabaseAnonKey: '', demoMode: true };
+const DEFAULT_CONFIG: PublicShopConfig = { shopName: 'Thread in Loops', currency: 'INR', currencyLocale: 'en-IN', supabaseUrl: '', supabaseAnonKey: '', demoMode: true };
 const PRODUCTS_KEY = 'madhu-crochet-demo-products-v1';
 const ORDERS_KEY = 'madhu-crochet-demo-orders-v1';
 const ORDER_STATUSES: OrderStatus[] = ['new', 'confirmed', 'making', 'shipped', 'delivered', 'cancelled', 'refunded', 'returned'];
@@ -67,7 +67,7 @@ function configFromJson(value: unknown): PublicShopConfig {
   const source = object(value);
   if ('demoMode' in source && typeof source['demoMode'] !== 'boolean') throw new Error('Shop configuration demoMode must be true or false.');
   const config: PublicShopConfig = {
-    shopName: typeof source['shopName'] === 'string' && source['shopName'].trim() ? source['shopName'].trim().slice(0, 100) : DEFAULT_CONFIG.shopName,
+    shopName: 'Thread in Loops',
     currency: 'INR', currencyLocale: 'en-IN',
     supabaseUrl: typeof source['supabaseUrl'] === 'string' ? source['supabaseUrl'].trim() : '',
     supabaseAnonKey: typeof source['supabaseAnonKey'] === 'string' ? source['supabaseAnonKey'].trim() : '',
