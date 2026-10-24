@@ -8,7 +8,7 @@
         <h1>Your shop,<br><em>beautifully in hand.</em></h1>
         <p class="story-copy">A quiet space for your creations, your customers, and all the little details that make your business yours.</p>
         <div class="story-cards" aria-hidden="true"><div class="story-card peach"><span>01</span><strong>Made with love.</strong><div class="stitch-art">✳</div></div><div class="story-card lavender"><span>02</span><strong>Ready to send.</strong><div class="parcel-art">♡</div></div></div>
-        <p class="story-footer">{{ shop.config().shopName || "Madhu's Crochet" }} <span>·</span> Shop workspace</p>
+        <p class="story-footer">{{ shop.config().shopName || 'Thread in Loops' }} <span>·</span> Shop workspace</p>
       </section>
       <section class="login-panel" aria-labelledby="login-heading">
         <div class="small-mark" aria-hidden="true">✳</div>
@@ -36,7 +36,7 @@
 } @else {
   <div class="admin-shell">
     <aside class="sidebar">
-      <a class="admin-brand" href="/"><span class="brand-mark small" aria-hidden="true">✳</span><span>{{ shop.config().shopName || "Madhu's Crochet" }}<small>SHOP WORKSPACE</small></span></a>
+      <a class="admin-brand" href="/"><span class="brand-mark small" aria-hidden="true">✳</span><span>{{ shop.config().shopName || 'Thread in Loops' }}<small>SHOP WORKSPACE</small></span></a>
       <div class="nav-label">YOUR SHOP</div>
       <nav aria-label="Admin sections">
         <button type="button" [class.active]="tab() === 'products'" [attr.aria-current]="tab() === 'products' ? 'page' : null" (click)="tab.set('products')"><span aria-hidden="true">▦</span> Products <span class="nav-count">{{ shop.products().length }}</span></button>
