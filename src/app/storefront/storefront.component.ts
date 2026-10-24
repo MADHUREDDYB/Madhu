@@ -95,6 +95,13 @@ export class StorefrontComponent implements OnInit, OnDestroy {
     }
     const Razorpay = (window as any).Razorpay;
     if (typeof Razorpay !== 'function') throw new Error('Secure payment checkout is unavailable.');
+    // Native <dialog>.showModal() lives in the browser top layer and covers
+    // Razorpay's iframe regardless of CSS z-index. Close it before opening checkout.
+    const deliveryDialog = this.cartDialog().nativeElement;
+    if (deliveryDialog.open) {
+      deliveryDialog.close();
+      this.unlockScroll();
+    }
     return new Promise<boolean>((resolve, reject) => {
       let complete = false;
       const checkout = new Razorpay({
@@ -137,11 +144,13 @@ export class StorefrontComponent implements OnInit, OnDestroy {
       this.cart.clear();
       this.customer = { name: '', phone: '', email: '', address: '', city: '', postalCode: '', note: '' };
       this.panel.set('success');
+      if (!this.cartDialog().nativeElement.open) this.open(this.cartDialog().nativeElement);
     } catch (error) {
       if (savedOrder) {
         this.paymentNotice.set('Your order was saved, but payment could not be confirmed. Do not place another order. Contact the seller with your reference and payment details.');
         this.cart.clear();
         this.panel.set('success');
+        if (!this.cartDialog().nativeElement.open) this.open(this.cartDialog().nativeElement);
       } else this.checkoutErrors.set([error instanceof Error ? error.message : 'We couldn’t place your order. Please try again.']);
     } finally { this.submitting.set(false); }
   }
