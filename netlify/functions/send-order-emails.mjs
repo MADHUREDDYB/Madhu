@@ -9,9 +9,9 @@ export function emailContent(record, items = []) {
  const reference = safeText(record.order_number), customer = safeText(record.customer_name), total = formatMoney(record.total_paise);
  const messages = {
   order_placed: ['We received your order', 'Your order has been placed. Payment may still be pending until verified.'],
-  payment_received: ['Payment received', 'Your payment has been confirmed. Thank you for choosing Thread in Loops!'],
-  status_changed: ['Order update', 'Your order status is now: ' + safeText(record.order_status) + '.']
+  status_changed: ['Order update', ({confirmed:'Your order is confirmed.',making:'Your handmade item is being prepared.',shipped:'Your order has been dispatched.',delivered:'Your order has been delivered.',cancelled:'Your order has been cancelled.',refunded:'Your order has been marked refunded. Please contact us if the refund has not reached you.',returned:'We have received your returned item.'})[record.order_status] || ('Your order status is now: ' + safeText(record.order_status) + '.')]
  };
+ if(record.event_type === 'payment_received') return null;
  const [title,description] = messages[record.event_type] ?? messages.status_changed;
  const subject = 'Thread in Loops • ' + title + ' • ' + record.order_number;
  const rows = items.map(item => '<tr><td style="padding:8px;border-bottom:1px solid #eee">' + safeText(item.product_name) + '</td><td style="padding:8px;border-bottom:1px solid #eee">' + Number(item.quantity) + '</td><td style="padding:8px;border-bottom:1px solid #eee">' + formatMoney(item.unit_price_paise * item.quantity) + '</td></tr>').join('');
@@ -33,7 +33,9 @@ export default async () => {
    try {
      const {data:orderItems,error:itemsError} = await db.from('order_items').select('product_name,quantity,unit_price_paise').eq('order_id',item.order_id);
      if(itemsError) throw new Error('Order item lookup failed');
-     const {subject,html}=emailContent(item,orderItems ?? []);
+     const rendered=emailContent(item,orderItems ?? []);
+     if(!rendered){await db.from('order_email_outbox').update({status:'sent',sent_at:new Date().toISOString(),last_error:'Suppressed: payment receipt email disabled'}).eq('id',item.id);continue;}
+     const {subject,html}=rendered;
      const res=await fetch('https://api.resend.com/emails',{
        method:'POST',
        headers:{'Authorization':'Bearer '+RESEND_API_KEY,'Content-Type':'application/json','Idempotency-Key':item.event_key},
