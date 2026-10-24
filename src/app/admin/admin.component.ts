@@ -57,7 +57,7 @@ export class AdminComponent {
     featured: [false],
   });
 
-  readonly statuses: OrderStatus[] = ['new', 'confirmed', 'making', 'shipped', 'delivered', 'cancelled'];
+  readonly statuses: OrderStatus[] = ['new', 'confirmed', 'making', 'shipped', 'delivered', 'cancelled', 'refunded', 'returned'];
   readonly payments: PaymentStatus[] = ['pending', 'received'];
   readonly visibleProducts = computed(() => {
     const query = this.productSearch().trim().toLowerCase();
@@ -73,7 +73,7 @@ export class AdminComponent {
   });
   readonly selectedOrder = computed(() => this.selectedOrderId() ? this.shop.orders().find(order => order.id === this.selectedOrderId()) ?? this.selectedOrderSnapshot() : null);
   readonly activeProducts = computed(() => this.shop.products().filter(product => product.available && product.stock > 0).length);
-  readonly openOrders = computed(() => this.shop.orders().filter(order => !['delivered', 'cancelled'].includes(order.status)).length);
+  readonly openOrders = computed(() => this.shop.orders().filter(order => !['delivered', 'cancelled', 'refunded', 'returned'].includes(order.status)).length);
   readonly receivedTotal = computed(() => this.shop.orders().filter(order => order.paymentStatus === 'received').reduce((sum, order) => sum + order.total, 0));
 
   async ngOnInit(): Promise<void> {
@@ -294,7 +294,7 @@ export class AdminComponent {
   }
 
   statusLabel(value: string): string {
-    return value === 'new' ? 'New order' : value === 'making' ? 'Being made' : value === 'received' ? 'Received' : value.charAt(0).toUpperCase() + value.slice(1);
+    return value === 'returned' ? 'Item returned to us' : value === 'refunded' ? 'Refunded' : value === 'new' ? 'New order' : value === 'making' ? 'Being made' : value === 'received' ? 'Received' : value.charAt(0).toUpperCase() + value.slice(1);
   }
 
   private errorText(error: unknown, fallback: string): string {
