@@ -20,7 +20,7 @@ export function emailContent(record, items = []) {
  return {subject,html};
 }
 export default async () => {
- const { RESEND_API_KEY, EMAIL_FROM, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
+ const { RESEND_API_KEY, EMAIL_FROM, EMAIL_REPLY_TO, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
  if (![RESEND_API_KEY, EMAIL_FROM, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY].every(Boolean)) {
    console.log('[order-email] Mail provider not configured; leaving queued notifications untouched.');
    return new Response('Not configured', {status:200});
@@ -39,7 +39,7 @@ export default async () => {
      const res=await fetch('https://api.resend.com/emails',{
        method:'POST',
        headers:{'Authorization':'Bearer '+RESEND_API_KEY,'Content-Type':'application/json','Idempotency-Key':item.event_key},
-       body:JSON.stringify({from:EMAIL_FROM,to:[item.customer_email],subject,html})
+       body:JSON.stringify({from:EMAIL_FROM,to:[item.customer_email],reply_to:EMAIL_REPLY_TO || undefined,subject,html})
      });
      if(!res.ok) { const details=await res.text(); throw new Error('Resend HTTP '+res.status+': '+details.slice(0,260).replace(/[^\x20-\x7E]/g,' ')); }
      const payload=await res.json();
