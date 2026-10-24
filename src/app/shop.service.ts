@@ -214,20 +214,20 @@ export class ShopService {
     });
   }
 
-  async updateOrder(id: string, status: OrderStatus, paymentStatus: PaymentStatus): Promise<void> {
+  async updateOrder(id: string, status: OrderStatus): Promise<void> {
     await this.initialize();
     await this.run(async () => {
       this.requireAdmin();
-      if (!ORDER_STATUSES.includes(status) || !PAYMENT_STATUSES.includes(paymentStatus)) throw new Error('Choose a valid order and payment status.');
+      if (!ORDER_STATUSES.includes(status)) throw new Error('Choose a valid order status.');
       if (this.demoMode()) {
         const orders = this.readDemo<ShopOrder[]>(ORDERS_KEY, DEMO_ORDERS);
         if (!orders.some(order => order.id === id)) throw new Error('Order not found.');
-        const next = orders.map(order => order.id === id ? { ...order, status, paymentStatus } : order);
+        const next = orders.map(order => order.id === id ? { ...order, status } : order);
         this.writeDemo(ORDERS_KEY, next);
         this.orders.set(next);
         return;
       }
-      const { data, error } = await this.requireClient().from('orders').update({ status, payment_status: paymentStatus }).eq('id', id).select('id,status,payment_status').single();
+      const { data, error } = await this.requireClient().from('orders').update({ status }).eq('id', id).select('id,status,payment_status').single();
       if (error || !data) throw error ?? new Error('Could not update the order.');
       this.orders.update(orders => orders.map(order => order.id === id ? { ...order, status: data.status as OrderStatus, paymentStatus: data.payment_status as PaymentStatus } : order));
     });
