@@ -40,7 +40,16 @@ export class StorefrontComponent implements OnInit, OnDestroy {
   private toastTimer?: ReturnType<typeof setTimeout>;
 
   async ngOnInit(): Promise<void> {
-    try { await this.shop.initialize(); document.title = `${this.shop.config().shopName} — Handmade with a little love`; }
+    try {
+      const selected=sessionStorage.getItem('crochet.checkout.address');
+      if(selected){
+        sessionStorage.removeItem('crochet.checkout.address');
+        const saved=JSON.parse(selected);
+        if(saved && typeof saved.email==='string' && typeof saved.address==='string') {
+          this.customer={...this.customer,...saved};
+        }
+      }
+      await this.shop.initialize(); document.title = `${this.shop.config().shopName} — Handmade with a little love`; }
     catch { /* The service exposes a recoverable error and does not simulate live data. */ }
   }
 
