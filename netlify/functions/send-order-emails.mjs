@@ -41,13 +41,15 @@ export default async () => {
        headers:{'Authorization':'Bearer '+RESEND_API_KEY,'Content-Type':'application/json','Idempotency-Key':item.event_key},
        body:JSON.stringify({from:EMAIL_FROM,to:[item.customer_email],subject,html})
      });
-     if(!res.ok) throw new Error('Provider HTTP '+res.status);
+     if(!res.ok) { const details=await res.text(); throw new Error('Resend HTTP '+res.status+': '+details.slice(0,260).replace(/[^\x20-\x7E]/g,' ')); }
      const payload=await res.json();
      const {error:updateError}=await db.from('order_email_outbox').update({status:'sent',sent_at:new Date().toISOString(),provider_id:payload.id,last_error:null}).eq('id',item.id);
      if(updateError) throw new Error('Database status update failed');
      delivered++;
    } catch(error) {
-     const delayMinutes=Math.min(60,2**Math.min(item.attempts,5));
+     // The claim RPC does not return attempts; never derive a Date from undefined/NaN.
+     const attempts=Number.isFinite(Number(item.attempts)) ? Math.max(1,Number(item.attempts)) : 1;
+     const delayMinutes=Math.min(60,2**Math.min(attempts,5));
      await db.from('order_email_outbox').update({status:'failed',available_at:new Date(Date.now()+delayMinutes*60_000).toISOString(),last_error:error instanceof Error ? error.message.slice(0,120):'Unknown delivery error'}).eq('id',item.id);
      console.error('[order-email] Delivery failed. Event ID:',item.id,'Type:',error instanceof Error ? error.message : 'unknown');
    }
