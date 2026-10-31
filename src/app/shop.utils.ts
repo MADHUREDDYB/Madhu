@@ -38,7 +38,7 @@ export function validateCustomer(customer: Customer): string[] {
   const errors: string[] = [];
   if (customer.name.trim().length < 2 || customer.name.trim().length > 100) errors.push('Enter your full name (2–100 characters).');
   if (!/^[6-9]\d{9}$/.test(normalizePhone(customer.phone))) errors.push('Enter a valid 10-digit Indian mobile number.');
-  if (customer.email.trim() && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email.trim()) || customer.email.length > 254)) errors.push('Enter a valid email address, or leave it blank.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email.trim()) || customer.email.length > 254) errors.push('Enter a valid email address for order and delivery updates.');
   if (customer.address.trim().length < 10 || customer.address.trim().length > 400) errors.push('Enter your full delivery address (10–400 characters).');
   if (customer.city.trim().length < 2 || customer.city.trim().length > 100) errors.push('Enter your city (2–100 characters).');
   if (!/^[1-9]\d{5}$/.test(customer.postalCode.trim())) errors.push('Enter a valid 6-digit Indian PIN code.');

@@ -31,14 +31,12 @@ export class AdminComponent {
   readonly productSearch = signal('');
   readonly orderSearch = signal('');
   readonly statusFilter = signal('all');
-  readonly paymentFilter = signal('all');
   readonly selectedOrderId = signal<string | null>(null);
   private readonly selectedOrderSnapshot = signal<ShopOrder | null>(null);
   readonly orderBusy = signal(false);
   readonly orderError = signal('');
   readonly orderMessage = signal('');
   detailStatus: OrderStatus = 'new';
-  detailPayment: PaymentStatus = 'pending';
 
   readonly loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -57,8 +55,7 @@ export class AdminComponent {
     featured: [false],
   });
 
-  readonly statuses: OrderStatus[] = ['new', 'confirmed', 'making', 'shipped', 'delivered', 'cancelled'];
-  readonly payments: PaymentStatus[] = ['pending', 'received'];
+  readonly statuses: OrderStatus[] = ['new', 'confirmed', 'making', 'shipped', 'delivered', 'cancelled', 'refunded', 'returned'];
   readonly visibleProducts = computed(() => {
     const query = this.productSearch().trim().toLowerCase();
     return this.shop.products().filter(product => !query || `${product.name} ${product.category}`.toLowerCase().includes(query));
@@ -67,13 +64,12 @@ export class AdminComponent {
     const query = this.orderSearch().trim().toLowerCase();
     return this.shop.orders().filter(order =>
       (this.statusFilter() === 'all' || order.status === this.statusFilter()) &&
-      (this.paymentFilter() === 'all' || order.paymentStatus === this.paymentFilter()) &&
       (!query || `${order.orderNumber} ${order.customer.name} ${order.customer.phone}`.toLowerCase().includes(query))
     );
   });
   readonly selectedOrder = computed(() => this.selectedOrderId() ? this.shop.orders().find(order => order.id === this.selectedOrderId()) ?? this.selectedOrderSnapshot() : null);
   readonly activeProducts = computed(() => this.shop.products().filter(product => product.available && product.stock > 0).length);
-  readonly openOrders = computed(() => this.shop.orders().filter(order => !['delivered', 'cancelled'].includes(order.status)).length);
+  readonly openOrders = computed(() => this.shop.orders().filter(order => !['delivered', 'cancelled', 'refunded', 'returned'].includes(order.status)).length);
   readonly receivedTotal = computed(() => this.shop.orders().filter(order => order.paymentStatus === 'received').reduce((sum, order) => sum + order.total, 0));
 
   async ngOnInit(): Promise<void> {
@@ -238,7 +234,6 @@ export class AdminComponent {
     this.selectedOrderId.set(order.id);
     this.selectedOrderSnapshot.set(order);
     this.detailStatus = order.status;
-    this.detailPayment = order.paymentStatus;
     this.orderError.set('');
     this.orderMessage.set('');
     setTimeout(() => {
@@ -269,10 +264,10 @@ export class AdminComponent {
     this.orderError.set('');
     this.orderMessage.set('');
     try {
-      await this.shop.updateOrder(order.id, this.detailStatus, this.detailPayment);
-      this.selectedOrderSnapshot.set({ ...order, status: this.detailStatus, paymentStatus: this.detailPayment });
+      await this.shop.updateOrder(order.id, this.detailStatus);
+      this.selectedOrderSnapshot.set({ ...order, status: this.detailStatus });
       this.message.set(`${order.orderNumber} updated.`);
-      this.orderMessage.set('Order and payment status saved.');
+      this.orderMessage.set('Order status saved.');
     } catch (error) {
       this.orderError.set(this.errorText(error, 'This order could not update. Please try again.'));
     } finally {
@@ -294,7 +289,7 @@ export class AdminComponent {
   }
 
   statusLabel(value: string): string {
-    return value === 'new' ? 'New order' : value === 'making' ? 'Being made' : value === 'received' ? 'Received' : value.charAt(0).toUpperCase() + value.slice(1);
+    return value === 'returned' ? 'Item received back (undelivered)' : value === 'refunded' ? 'Refunded' : value === 'new' ? 'New order' : value === 'making' ? 'Being made' : value === 'received' ? 'Received' : value.charAt(0).toUpperCase() + value.slice(1);
   }
 
   private errorText(error: unknown, fallback: string): string {
