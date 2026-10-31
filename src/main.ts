@@ -7,6 +7,7 @@ import { StorefrontComponent } from './app/storefront/storefront.component';
 bootstrapApplication(ShopAppComponent, {
   providers: [provideZonelessChangeDetection(), provideRouter([
     { path: '', component: StorefrontComponent },
+    { path: 'account', loadComponent: () => import('./app/customer/customer-account.component').then(module => module.CustomerAccountComponent) },
     { path: 'admin', loadComponent: () => import('./app/admin/admin.component').then(module => module.AdminComponent) },
     { path: '**', redirectTo: '' }
   ])],
